@@ -1,7 +1,8 @@
-package main
+package array
 
 import (
 	"fmt"
+	"testing"
 )
 /**
 给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。
@@ -22,9 +23,6 @@ import (
 链接：https://leetcode-cn.com/problems/two-sum
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
  */
-
-
-
 
 
 func twoSum(nums []int, target int) []int {
@@ -52,7 +50,7 @@ func twoSum2(nums []int, target int) []int {
 	return nil
 }
 
-func main()  {
+func Test(t *testing.T) {
 	arr := []int{2,7,11,15, 16, 17,18,19,20,21,22,23,24,25,26}
 	fmt.Println(twoSum(arr, 9))
 	fmt.Println(twoSum2(arr, 26))
