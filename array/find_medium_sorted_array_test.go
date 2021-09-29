@@ -32,10 +32,23 @@ import (
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 */
+
+
+
+/**
+合并两个数组再去中间数
+ */
 func findMedianSortedArrays_merge(nums1 []int, nums2 []int) float64 {
 	res := mergeSortedArray(nums1, nums2)
 	fmt.Println(res)
-	return 0
+	l := len(res)
+	median := 0.0
+	if l % 2 ==0 {
+		median = float64(res[l/2 -1] + res[l/2]) / 2.0
+	} else {
+		median = float64(res[l/2])
+	}
+	return median
 }
 
 func mergeSortedArray(nums1 []int, nums2 []int) []int{
@@ -71,11 +84,109 @@ func mergeSortedArray(nums1 []int, nums2 []int) []int{
 	return res
 }
 
+func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
+	l1 := len(nums1)
+	l2 := len(nums2)
+	total := l1 + l2
+	even := total % 2 == 0
+	median := total / 2
+	start := 0
+	start1 := 0
+	start2 := 0
+	count := 0
+	flg := true	// true表示当前循环去nums1的值 否则取nums2的值
+	for start <= median  {
+		if start1 >= l1 {
+			flg = false
+			start2++
+		} else if start2 >= l2 {
+			flg = true
+			start1++
+		} else if nums1[start1] <= nums2[start2] {
+			flg = true
+			start1++
+		} else {
+			flg = false
+			start2++
+		}
+
+		// 数组长度为偶数
+		if even && (start == median-1 || start == median) {
+			if flg {
+				count += nums1[start1-1]
+			} else {
+				count += nums2[start2-1]
+			}
+		}
+
+		if !even && start == median {
+			if flg {
+				count += nums1[start1-1]
+			} else {
+				count += nums2[start2-1]
+			}
+		}
+
+
+		start++
+	}
+	res := 0.0
+	if even {
+		 res = float64(count) / 2.0
+	} else {
+		 res = float64(count)
+	}
+	return res
+}
+
+func findMedianSortedArrays_2(nums1 []int, nums2 []int) float64 {
+	l1 := len(nums1)
+	l2 := len(nums2)
+	total := l1 + l2
+	even := total % 2 == 0
+	median := total / 2
+	start := 0
+	start1 := 0
+	start2 := 0
+	preNum := 0
+	curNum := 0
+	for start <= median  {
+		preNum = curNum
+		if start1 >= l1 {
+			curNum = nums2[start2]
+			start2++
+		} else if start2 >= l2 {
+			curNum = nums1[start1]
+			start1++
+		} else if nums1[start1] <= nums2[start2] {
+			curNum = nums1[start1]
+			start1++
+		} else {
+			curNum = nums2[start2]
+			start2++
+		}
+		start++
+	}
+
+	res := 0.0
+	if even {
+		res = float64(preNum + curNum) / 2.0
+	} else {
+		res = float64(curNum)
+	}
+	return res
+}
+
 
 
 func TestMedianSortedArrays(t *testing.T) {
-	var nums1 = []int{1,3,6}
-	var nums2  = []int{2,2,3,4,5,8}
-
-	findMedianSortedArrays_merge(nums1, nums2)
+	var nums1 = []int{1,3,4,6}
+	var nums2  = []int{2,5,7,8}
+	res := 0.0
+	res = findMedianSortedArrays_merge(nums1, nums2)
+	fmt.Println(res)
+	res = findMedianSortedArrays(nums1, nums2)
+	fmt.Println(res)
+	res = findMedianSortedArrays_2(nums1, nums2)
+	fmt.Println(res)
 }
